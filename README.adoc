@@ -1,0 +1,26 @@
+# Asciidoc Setup Template
+
+This project is an introduction to Asciidoc. Especially for the Astro team.
+As you can see Asciidoc supports markdown syntax and it's own 
+
+Information about Asciidoc will be written in this project along with boilerplate
+code for it's integration into Astro. 
+
+This repo uses pnpm as it's package manager. 
+
+To start the server run
+
+[,sh]
+----
+pnpm dev 
+----
+
+To run the tests for Asciidoc 
+[,sh]
+----
+pnpm run test
+----
+This project will contain a page dedicated to showing you how the language works! 
+
+This project will contain boilerplate code for playing around with the asciidoc processor.
+
