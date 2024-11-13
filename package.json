@@ -7,6 +7,8 @@
     "start": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "test": "vitest",
+    "coverage": "vitest run --coverage",
     "astro": "astro"
   },
   "dependencies": {
@@ -14,6 +16,8 @@
     "astro": "^4.16.8"
   },
   "devDependencies": {
+    "@biomejs/biome": "1.9.4",
+    "@vitest/coverage-istanbul": "^2.1.4",
     "asciidoctor": "^3.0.4",
     "unocss": "^0.64.0",
     "vitest": "^2.1.4"
