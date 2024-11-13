@@ -317,4 +317,46 @@ Empowers developers to easily create real, automated tests.
 |===
 ----
 
+== Macros
+
+A macro is a special syntax that uses a word followed by a colon then an attribute list at the end `element:[]`.
+
+[NOTE]
+.Image Macro
+====
+[source,adoc]
+----
+ image:sunset.jpg[] 
+----
+====
+
+[NOTE]
+.Link Macro
+====
+[source,adoc]
+----
+link:index.html[]
+----
+====
+
+
+[NOTE]
+.Video Macro
+====
+[source,adoc]
+----
+video::clip.mp4[]
+----
+====
+
+[NOTE]
+.Audio Macro
+====
+[source,adoc]
+----
+audio::ocean-waves.wav[]
+
+audio::ocean-waves.wav[start=60,opts=autoplay]
+----
+====
 
