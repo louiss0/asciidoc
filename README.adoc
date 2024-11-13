@@ -8,14 +8,15 @@ code for it's integration into Astro.
 
 This repo uses pnpm as it's package manager. 
 
-To start the server run
+To start the server run.
 
 [,sh]
 ----
 pnpm dev 
 ----
 
-To run the tests for Asciidoc 
+To run the tests for Asciidoc.
+
 [,sh]
 ----
 pnpm run test
@@ -24,3 +25,9 @@ This project will contain a page dedicated to showing you how the language works
 
 This project will contain boilerplate code for playing around with the asciidoc processor.
 
+For coverage run.
+
+[,sh]
+----
+pnpm run coverage
+----
