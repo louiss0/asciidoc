@@ -186,20 +186,27 @@ CAUTION: You can only only use one equal sign at the top level as the doc title.
 A block is a container that tells Asciidoc to do something special with a series of content. They normally start with 3-4 dots equal signs or dashes under the attribute list and a the same symbols at the bottom. Some block's may require one sign.
 Some blocks require an attribute list. `[,adoc]` 
 
-A Sidebar block 
 
+.A Sidebar block
+==== 
+```adoc
 ****
     I live aside from the main content.
 ****
-
-An Example block 
-
-====
-    I'm clearly an example.
+```
 ====
 
-Blockquote
+.An Example block
+==== 
+```adoc
+  ====
+      I'm clearly an example.
+  ====
+```
+====
 
+.Blockquote
+====
 [source,adoc]
 ----
 
@@ -210,9 +217,11 @@ on this continent a new nation...
 ____
 
 ----
+====
 
-Pass though block. *A block that render's content as is*.
-
+.Pass though block. *A block that render's content as is*.
+====
+```adoc
 ++++
 <p>
 Content in a passthrough block is passed to the output unprocessed.
@@ -222,20 +231,22 @@ That means you can include raw HTML, like this embedded Gist:
 <script src="https://gist.github.com/mojavelinux/5333524.js">
 </script>
 ++++
+```
+====
 
 
-NOTE: A block can also have a title.
-
-IMPORTANT: When it has a title it must start with a *.*
-
-
+[TIP]
+.A block can also have a title.
+====
+When it has a title it must start with a *.*
 
 [source,adoc]
 ----
-.Title
-
-
+  .Title
+  ----
+  ----
 ----
+====
 
 === Attributes
 
