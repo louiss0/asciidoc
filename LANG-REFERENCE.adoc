@@ -32,43 +32,54 @@ There's more stuff but this is what most people would use anyway.
 
 A paragraph in Asciidoc is just one or more sentences. Just like markdown!
 
-Bold is written like this.  *Bold*
+Bold is written like this.  `\*Bold*`
 
-Italic is written like this. _Italic_
+Italic is written like this. `\_Italic_`
 
 Underline is written like this. [.underline]#underline#
 
-Line through is written like this. [.line-through]#line through#
+Line through is written like this. `\[.line-through]\#line through#`
 
-Highlight is written like this. #highlight#
+Highlight is written like this.   `\#highlight#`
 
-Super script is written like this. ^super^script
+Super script is written like this.  `\^super^script`
 
-Subscript is written like this. ~sub~script
+Subscript is written like this. `\~sub~script`
 
-A double quote is written like this. "`double quote`"
+A double quote is written like this. `\"`double quote`"``
 
-A single quote is written like this. "`single quote`"
+A single quote is written like this. `\"`single quote`"``
 
-An apostrophe is written like this.  apostrophe`"`
+An apostrophe is written like this.  `apostrophe`"`
 
-A bare link is written like this https://asciidoctor.org
+A bare link is written like this `\https://asciidoctor.org`
 
-A named link is written like this https://asciidoctor.org[Asciidoctor]
+A named link is written like this `\https://asciidoctor.org[Asciidoctor]`
 
-A inline code is written like this `script.ts`. 
+A inline code is written like this \``script.ts``.
+
+A thematic break is written like this.
+
+`''''`
+
+A page break is written like this 
+
+`<<<`
 
 A block of code is written like this.
 
-```sh
-pnpm run test
-```
+\````sh pnpm run test````
+
 
 A code block can also be written like this.
 
-[,sh]
+
+[source,adoc]
 ----
-pnpm run dev
+  [,sh]
+  ----
+  pnpm run dev
+  ----
 ----
 
 A hard line break is written like this.
@@ -278,6 +289,7 @@ IMPORTANT: Admonitions use 4 equal signs `====` as delimiters.
 
 ----
 
+
 === Tables 
 
 A table is a special block that is written by using three equal signs prefixed with a pipe `|===` at the top and the bottom. To write a row in between the delimiters you first type pipe `|` which then type words. Columns are separated by commas.
@@ -316,6 +328,7 @@ performance, portability.
 Empowers developers to easily create real, automated tests.
 |===
 ----
+
 
 == Macros
 
