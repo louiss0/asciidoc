@@ -1,0 +1,14 @@
+// This is the title of the page
+# Intro to Asciidoc
+Brian West <brainwest@mailtrap.com>; James Shell <jamesheell@example.com>
+// This is where global attributes are written
+:description: This is my first Ascii document
+
+// This is the Content it must start after the documents
+
+////
+    This is a multiline comment
+////
+
+This is the intro.
+ 
