@@ -7,6 +7,17 @@ const processor = asciidoctor()
 
 const PATH_TO_THE_FIRST_PAGE = 'src/posts/first-page.adoc'
 
+const pageTest = test.extend<{ doc: Document }>({
+    // biome-ignore lint/correctness/noEmptyPattern: <explanation>
+    async doc({ }, use) {
+
+        const doc = processor.loadFile(PATH_TO_THE_FIRST_PAGE,)
+        await use(doc)
+
+
+    }
+})
+
 describe('Testing asciidoc', () => {
 
 
@@ -21,7 +32,10 @@ describe('Testing asciidoc', () => {
 
     test("it renders html by default", () => {
 
-        const doc = processor.convertFile(PATH_TO_THE_FIRST_PAGE) as unknown as Document
+        const doc = processor.convertFile(
+            PATH_TO_THE_FIRST_PAGE,
+
+        ) as unknown as Document
 
 
         const content = doc.getContent()
@@ -38,8 +52,6 @@ describe('Testing asciidoc', () => {
 
 
         const title = doc.getTitle()
-
-
 
 
         expect(title).toBe("Intro to Asciidoc")
@@ -74,6 +86,26 @@ describe('Testing asciidoc', () => {
         }
     )
 
+    pageTest('section titles can be queried', ({ doc }) => {
+
+
+
+        console.dir(doc)
+
+        const sectionTitles = doc.getSections().map(section => section.getTitle())
+
+
+
+        expect(sectionTitles).toMatchInlineSnapshot(`
+          [
+            "Section One",
+            "Section Two",
+          ]
+        `)
+
+
+
+    })
 
 
 })
