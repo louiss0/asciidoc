@@ -7,7 +7,7 @@ const processor = asciidoctor()
 
 const PATH_TO_THE_FIRST_PAGE = 'src/posts/first-page.adoc'
 
-const pageTest = test.extend<{ doc: Document }>({
+const docTest = test.extend<{ doc: Document }>({
     // biome-ignore lint/correctness/noEmptyPattern: <explanation>
     async doc({ }, use) {
 
@@ -23,7 +23,7 @@ const pageTest = test.extend<{ doc: Document }>({
 describe('Testing asciidoc', () => {
 
 
-    pageTest("It works", ({ doc }) => {
+    docTest("It works", ({ doc }) => {
 
 
         expect(doc).not.toBeTypeOf("string")
@@ -31,7 +31,7 @@ describe('Testing asciidoc', () => {
 
     })
 
-    pageTest("it renders html by default", ({ doc }) => {
+    docTest("it renders html by default", ({ doc }) => {
 
 
 
@@ -43,7 +43,7 @@ describe('Testing asciidoc', () => {
 
     })
 
-    pageTest("it get's the title", ({ doc }) => {
+    docTest("it get's the title", ({ doc }) => {
 
 
 
@@ -56,7 +56,7 @@ describe('Testing asciidoc', () => {
     })
 
 
-    pageTest(
+    docTest(
         "The document contains important information about it's self",
         ({ doc }) => {
 
@@ -81,7 +81,7 @@ describe('Testing asciidoc', () => {
         }
     )
 
-    pageTest('section titles can be queried', ({ doc }) => {
+    docTest('section titles can be queried', ({ doc }) => {
 
 
 
@@ -100,6 +100,7 @@ describe('Testing asciidoc', () => {
 
 
     })
+
 
 
 })
