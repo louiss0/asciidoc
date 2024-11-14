@@ -398,7 +398,7 @@ Inter document references can be done too. When using transclusion you can selec
 ```
 ==== 
 
-.Referencing a Section then rendering s different name.
+.Referencing a Section then rendering s different name
 ====
 
 ```adoc
