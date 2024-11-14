@@ -84,8 +84,6 @@ describe('Testing asciidoc', () => {
     docTest('section titles can be queried', ({ doc }) => {
 
 
-
-
         const sectionTitles = doc.getSections().map(section => section.getTitle())
 
 
@@ -98,6 +96,16 @@ describe('Testing asciidoc', () => {
         `)
 
 
+
+    })
+
+    docTest("A slug can be created from the document", ({ doc }) => {
+
+
+        const slug = doc.getTitle().toLowerCase().replaceAll(/\s+/g, "-")
+
+
+        expect(slug).toBe("intro-to-asciidoc")
 
     })
 
