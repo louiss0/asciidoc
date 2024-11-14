@@ -12,6 +12,8 @@ const pageTest = test.extend<{ doc: Document }>({
     async doc({ }, use) {
 
         const doc = processor.loadFile(PATH_TO_THE_FIRST_PAGE,)
+
+
         await use(doc)
 
 
@@ -21,7 +23,7 @@ const pageTest = test.extend<{ doc: Document }>({
 describe('Testing asciidoc', () => {
 
 
-    test("It works", () => {
+    pageTest("It works", () => {
 
         const doc = processor.convertFile(PATH_TO_THE_FIRST_PAGE)
 
@@ -30,7 +32,7 @@ describe('Testing asciidoc', () => {
 
     })
 
-    test("it renders html by default", () => {
+    pageTest("it renders html by default", () => {
 
         const doc = processor.convertFile(
             PATH_TO_THE_FIRST_PAGE,
@@ -46,7 +48,7 @@ describe('Testing asciidoc', () => {
 
     })
 
-    test("it get's the title", () => {
+    pageTest("it get's the title", () => {
 
         const doc = processor.convertFile(PATH_TO_THE_FIRST_PAGE) as unknown as Document
 
@@ -60,7 +62,7 @@ describe('Testing asciidoc', () => {
     })
 
 
-    test(
+    pageTest(
         "The document contains important information about it's self",
         () => {
 
@@ -90,7 +92,6 @@ describe('Testing asciidoc', () => {
 
 
 
-        console.dir(doc)
 
         const sectionTitles = doc.getSections().map(section => section.getTitle())
 
