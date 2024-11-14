@@ -23,21 +23,16 @@ const pageTest = test.extend<{ doc: Document }>({
 describe('Testing asciidoc', () => {
 
 
-    pageTest("It works", () => {
+    pageTest("It works", ({ doc }) => {
 
-        const doc = processor.convertFile(PATH_TO_THE_FIRST_PAGE)
 
         expect(doc).not.toBeTypeOf("string")
 
 
     })
 
-    pageTest("it renders html by default", () => {
+    pageTest("it renders html by default", ({ doc }) => {
 
-        const doc = processor.convertFile(
-            PATH_TO_THE_FIRST_PAGE,
-
-        ) as unknown as Document
 
 
         const content = doc.getContent()
@@ -48,9 +43,8 @@ describe('Testing asciidoc', () => {
 
     })
 
-    pageTest("it get's the title", () => {
+    pageTest("it get's the title", ({ doc }) => {
 
-        const doc = processor.convertFile(PATH_TO_THE_FIRST_PAGE) as unknown as Document
 
 
         const title = doc.getTitle()
@@ -64,10 +58,9 @@ describe('Testing asciidoc', () => {
 
     pageTest(
         "The document contains important information about it's self",
-        () => {
+        ({ doc }) => {
 
 
-            const doc = processor.convertFile(PATH_TO_THE_FIRST_PAGE) as unknown as Document
 
             const docAttributesSchema = z.object({
                 doctitle: z.string(),
