@@ -384,3 +384,40 @@ audio::ocean-waves.wav[start=60,opts=autoplay]
 ----
 ====
 
+== Referencing and Transclusion
+
+Different sections of a document can be linked to each other.
+Inter document references can be done too. When using transclusion you can select ranges lines of text or even 
+
+
+.Referencing a section
+====
+
+```adoc
+<<_writing_syntax>>
+```
+==== 
+
+.Referencing a Section then rendering s different name.
+====
+
+```adoc
+<<_writing_syntax, The Writing Syntax>>
+```
+====
+
+.Referring to another doc
+====
+
+```adoc
+Refer to link:document-b.html#section-b[Section B] for more information.
+```
+
+====
+
+.Transclusion
+====
+```adoc
+  include::partial.adoc[]
+```
+====
