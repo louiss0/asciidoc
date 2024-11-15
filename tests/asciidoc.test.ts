@@ -22,11 +22,11 @@ class ShikiHighlighter extends processor.SyntaxHighlighter {
     }
 
     //  This method is for changing the highlight. 
-    highlight(node: Block, source: string, lang: string, opts: SyntaxHighlighterHighlightOptions) {
+    // highlight(node: Block, source: string, lang: string, opts: SyntaxHighlighterHighlightOptions) {
 
-        return "I'm Shiki"
+    //     return "I'm Shiki"
 
-    }
+    // }
 }
 
 
@@ -188,7 +188,6 @@ describe('Testing asciidoc', () => {
 
     docTest(
         "an image is rendered when 'astro-image' is rendered on the page ",
-
         ({ doc }) => {
 
             expect(doc.getContent()).toMatch(/<img\s+src="\S+"\s+alt=".+"(?:\s+)?>/g)
@@ -196,12 +195,14 @@ describe('Testing asciidoc', () => {
         })
 
     docTest.skipIf(HIGHLIGHTER !== 'shiki')
-        ("code blocks are changed into 'I'm shiki' when using shiki highlighter ", ({ doc }) => {
+        (
+            "code blocks are changed into 'I'm shiki' when using shiki highlighter ",
+            ({ doc }) => {
 
+                expect(doc.getContent()).toMatch(/I'm shiki/g)
 
-            expect(doc.getContent()).toMatch(/I'm shiki/g)
-
-        })
+            }
+        )
 
 
 })
