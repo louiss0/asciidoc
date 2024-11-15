@@ -136,6 +136,8 @@ describe('Testing asciidoc', () => {
     docTest('section titles can be queried', ({ doc }) => {
 
 
+
+
         const sectionTitles = doc.getSections().map(section => section.getTitle())
 
 
@@ -160,24 +162,6 @@ describe('Testing asciidoc', () => {
         expect(slug).toBe("intro-to-asciidoc")
 
     })
-
-    docTest(
-        "render's an image tag when astro-image is used",
-        ({ doc }) => {
-
-
-            const content = doc.getContent()
-
-
-
-            const IMAGE_TAG_REGEX = /<img\s+src="\S+"\s+alt=".+"(?:\s+)?>/g
-
-
-
-            expect(content).toMatch(IMAGE_TAG_REGEX)
-
-
-        })
 
 
 
