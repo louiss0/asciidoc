@@ -163,6 +163,14 @@ describe('Testing asciidoc', () => {
 
     })
 
+    docTest(
+        "an image is rendered when 'astro-image' is rendered on the page ",
+
+        ({ doc }) => {
+
+            expect(doc.getContent()).toMatch(/<img\s+src="\S+"\s+alt=".+"(?:\s+)?>/g)
+
+        })
 
 
 })

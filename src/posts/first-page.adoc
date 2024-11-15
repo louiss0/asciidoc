@@ -14,5 +14,8 @@ This is the intro.
 
 == Section One
 
+
+astro-image:../assets/autumn-7644257_1280.jpg[]
+
 == Section Two
  
