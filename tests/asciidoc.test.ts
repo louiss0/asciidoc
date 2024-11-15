@@ -1,5 +1,10 @@
 
-import asciidoctor, { type Block, type Document, type SyntaxHighlighterFormatOptions, type SyntaxHighlighterHighlightOptions, } from 'asciidoctor'
+import asciidoctor, {
+    type Block, type Document,
+    type SyntaxHighlighterFormatOptions,
+    type SyntaxHighlighterHighlightOptions,
+} from 'asciidoctor'
+
 import { z } from 'astro/zod'
 
 
