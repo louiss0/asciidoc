@@ -1,17 +1,69 @@
 
-import asciidoctor, { type Document } from 'asciidoctor'
+import asciidoctor, { type Document, } from 'asciidoctor'
 import { z } from 'astro/zod'
+
+
+const PATH_TO_THE_FIRST_PAGE = 'src/posts/first-page.adoc'
 
 
 const processor = asciidoctor()
 
-const PATH_TO_THE_FIRST_PAGE = 'src/posts/first-page.adoc'
+
+processor.Extensions.register(function () {
+
+    this.blockMacro("astro-image", function () {
+
+        this.process(function (parent, target, attrs) {
+
+            //! This code won't work all tests fail if used 
+            // let image: Awaited<ReturnType<typeof getImage>>
+
+            // getImage(
+            //     {
+            //         src: target,
+            //         inferSize: true,
+            //         ...attrs
+            //     },
+            //     null
+            // ).then((value) => {
+            //     image = value
+            // }).catch(console.error)
+
+
+            return this.createImageBlock(
+                parent,
+                {
+                    target,
+                    ...attrs
+                },
+            )
+
+        })
+
+    })
+
+
+
+
+
+})
+
 
 const docTest = test.extend<{ doc: Document }>({
     // biome-ignore lint/correctness/noEmptyPattern: <explanation>
     async doc({ }, use) {
 
-        const doc = processor.loadFile(PATH_TO_THE_FIRST_PAGE,)
+
+        const doc = processor.loadFile(
+            PATH_TO_THE_FIRST_PAGE,
+            {
+                attributes: {
+                    experimental: true,
+                    highlighter: 'shiki'
+                }
+            }
+        )
+
 
 
         await use(doc)
@@ -108,6 +160,24 @@ describe('Testing asciidoc', () => {
         expect(slug).toBe("intro-to-asciidoc")
 
     })
+
+    docTest(
+        "render's an image tag when astro-image is used",
+        ({ doc }) => {
+
+
+            const content = doc.getContent()
+
+
+
+            const IMAGE_TAG_REGEX = /<img\s+src="\S+"\s+alt=".+"(?:\s+)?>/g
+
+
+
+            expect(content).toMatch(IMAGE_TAG_REGEX)
+
+
+        })
 
 
 
