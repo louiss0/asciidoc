@@ -1,5 +1,5 @@
 
-import asciidoctor, { type Document, } from 'asciidoctor'
+import asciidoctor, { type Block, type Document, type SyntaxHighlighterFormatOptions, type SyntaxHighlighterHighlightOptions, } from 'asciidoctor'
 import { z } from 'astro/zod'
 
 
@@ -8,6 +8,29 @@ const PATH_TO_THE_FIRST_PAGE = 'src/posts/first-page.adoc'
 
 const processor = asciidoctor()
 
+
+const HIGHLIGHTER = "shiki"
+
+
+class ShikiHighlighter extends processor.SyntaxHighlighter {
+
+
+
+    // This method is responsible for changing the string
+    override format(node: Block, lang: string, opts?: SyntaxHighlighterFormatOptions): string {
+        return "I'm shiki"
+    }
+
+    //  This method is for changing the highlight. 
+    highlight(node: Block, source: string, lang: string, opts: SyntaxHighlighterHighlightOptions) {
+
+        return "I'm Shiki"
+
+    }
+}
+
+
+processor.SyntaxHighlighter.register("shiki", ShikiHighlighter)
 
 processor.Extensions.register(function () {
 
@@ -59,7 +82,7 @@ const docTest = test.extend<{ doc: Document }>({
             {
                 attributes: {
                     experimental: true,
-                    highlighter: 'shiki'
+                    'source-highlighter': HIGHLIGHTER
                 }
             }
         )
@@ -169,6 +192,14 @@ describe('Testing asciidoc', () => {
         ({ doc }) => {
 
             expect(doc.getContent()).toMatch(/<img\s+src="\S+"\s+alt=".+"(?:\s+)?>/g)
+
+        })
+
+    docTest.skipIf(HIGHLIGHTER !== 'shiki')
+        ("code blocks are changed into 'I'm shiki' when using shiki highlighter ", ({ doc }) => {
+
+
+            expect(doc.getContent()).toMatch(/I'm shiki/g)
 
         })
 
