@@ -1,5 +1,6 @@
 
 import asciidoctor, {
+    type Reader,
     type Block, type Document,
     type SyntaxHighlighterFormatOptions,
     type SyntaxHighlighterHighlightOptions,
@@ -27,17 +28,38 @@ class ShikiHighlighter extends processor.SyntaxHighlighter {
     }
 
     //  This method is for changing the highlight. 
-    // highlight(node: Block, source: string, lang: string, opts: SyntaxHighlighterHighlightOptions) {
 
-    //     return "I'm Shiki"
+    highlight(node: Block, source: string, lang: string, opts: SyntaxHighlighterHighlightOptions) {
 
-    // }
+        return "I'm Shiki"
+
+    }
 }
 
 
 processor.SyntaxHighlighter.register("shiki", ShikiHighlighter)
 
 processor.Extensions.register(function () {
+
+
+
+    this.block("picture", function () {
+
+        this.onContext('pass')
+
+        this.process(function (parent, reader, attributes) {
+
+            return this.createPassBlock(parent,
+                `<picture>${reader.getString()}</picture>`,
+                attributes,
+
+            )
+
+        })
+
+    })
+
+
 
     this.blockMacro("astro-image", function () {
 
@@ -77,8 +99,185 @@ processor.Extensions.register(function () {
 })
 
 
+
+type AsciidocGlobalVariables = {
+    'source-highlighter': string
+    author: string
+    backend: string
+    filetype: boolean
+    localdir: string
+    localdate: string
+    localdatetime: string
+    localtime: string
+    localyear: number
+    'attribute-missing': 'drop' | 'drop-line' | 'skip' | 'warn'
+    'attribute-undefined': 'drop' | 'drop-line'
+    experimental: boolean
+    'appendix-caption': string
+    'appendix-number': string
+    'appendix-refsig': string
+    'caution-caption': string
+    'caution-number': string
+    'caution-refsig': string
+    'caution-signifier': string
+    'example-caption': string
+    'example-number': string
+    'figure-caption': string
+    'figure-number': number
+    'footnote-number': number
+    'important-caption': string
+    'last-update-label': string
+    'listing-caption': string
+    'listing-number': number
+    'note-caption': string
+    'part-refsig': string
+    'part-signifier': string
+    'preface-title': string
+    'table-caption': string
+    'table-number': string
+    'tip-caption': string
+    'toc-title': string
+    'untitled-label': string
+    'warning-caption': string
+    'app-name': string
+    authors: string
+    idprefix: string
+    idseparator: string
+    leveloffset: 0 | 1 | 2 | 3 | 4 | 5
+    partnums: boolean
+    setanchors: boolean
+    sectids: boolean
+    sectlinks: boolean
+    sectnums: boolean
+    sectnumlevels: 0 | 1 | 2 | 3 | 4 | 5
+    'title-separator': string
+    toc: true | 'auto' | 'left' | 'right' | 'macro' | 'preamble'
+    toclevels: 1 | 2 | 3 | 4 | 5
+    fragment: boolean
+    stylesheet: string
+}
+
+
+
+type AsciidocConfig = Partial<{
+    attributes: Partial<AsciidocGlobalVariables>
+    blocks: Record<string, {
+        context: 'example' | 'listing' | 'literal' | 'pass' | 'quote' | 'sidebar'
+        processor: (attributes: Record<string, NonNullable<unknown>>, reader: Reader) => string
+    }>
+    macros: {
+        inline: Record<
+            string,
+            {
+                context: 'example' | 'listing' | 'literal' | 'pass' | 'quote' | 'sidebar'
+                processor: (target: string, attributes: Record<string, NonNullable<unknown>>) => string
+            }
+
+        >
+        block: Record<string,
+            {
+                context: 'example' | 'listing' | 'literal' | 'pass' | 'quote' | 'sidebar'
+                processor: (target: string, attributes: Record<string, NonNullable<unknown>>) => string
+            }>
+    }
+
+}>
+
+
+
+
+function registerBasedOnConfig(config: AsciidocConfig) {
+
+    const processor = asciidoctor()
+
+    const registry = new processor.Extensions.Registry()
+
+    const { attributes, blocks, macros: { block, inline } } = config
+
+    for (const [blockName, blockContextAndProcessor] of Object.entries(blocks)) {
+
+
+        registry.block(blockName, function () {
+
+
+            this.process(function (parent, reader, attributes) {
+
+
+                return this.createBlock(
+                    parent,
+                    blockContextAndProcessor.context,
+                    blockContextAndProcessor.processor(
+                        attributes,
+                        reader
+                    ),
+                    attributes
+                )
+
+            })
+
+        })
+
+    }
+
+
+
+    for (const [inlineMacroName, inlineMacroContextAndProcessor] of Object.entries(inline)) {
+
+        registry.inlineMacro(inlineMacroName, function () {
+
+
+            this.process(function (parent, target, attributes) {
+
+
+                return this.createInline(
+                    parent,
+                    inlineMacroContextAndProcessor.context,
+                    inlineMacroContextAndProcessor.processor(target, attributes),
+                    attributes
+                )
+
+            })
+
+        })
+
+    }
+
+    for (const [blockMacroName, blockMacroContextAndProcessor] of Object.entries(block)) {
+
+        registry.inlineMacro(blockMacroName, function () {
+
+
+            this.process(function (parent, target, attributes) {
+
+
+                return this.createBlock(
+                    parent,
+                    blockMacroContextAndProcessor.context,
+                    blockMacroContextAndProcessor.processor(target, attributes),
+                    attributes
+                )
+
+            })
+
+        })
+
+
+    }
+
+    return (filename: string) => {
+
+
+        return processor.loadFile(filename, { attributes })
+
+    }
+
+}
+
+
+
+
 const docTest = test.extend<{ doc: Document }>({
-    // biome-ignore lint/correctness/noEmptyPattern: <explanation>
+    // biome-ignore lint/correctness/noEmptyPattern: Vitest requires this to be there
     async doc({ }, use) {
 
 
@@ -208,6 +407,26 @@ describe('Testing asciidoc', () => {
 
             }
         )
+
+
+    docTest(
+        "A literal picture block can be used to render a picture element",
+        ({ doc }) => {
+
+            expect(doc.getContent()).toMatch(/<picture>.+<\/picture>/g)
+
+        }
+    )
+
+
+    docTest(
+        "A literal picture block can be used to render a picture element with interpolation",
+        ({ doc }) => {
+
+            expect(doc.getContent()).toMatch(/<picture>.+Brad West.+<\/picture>/g)
+
+        }
+    )
 
 
 })
