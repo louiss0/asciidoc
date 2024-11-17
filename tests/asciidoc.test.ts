@@ -158,7 +158,6 @@ type AsciidocGlobalVariables = {
 }
 
 
-
 type AsciidocConfig = Partial<{
     attributes: Partial<AsciidocGlobalVariables>
     blocks: Record<string, {

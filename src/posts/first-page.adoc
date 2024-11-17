@@ -13,21 +13,18 @@ Brian West <brainwest@mailtrap.com>; James Shell <jamesheell@example.com>
 This is the intro.
 
 == Section One
-
+// The code written here is to satisfy "Testing asciidoc tests"
 [picture]
 ++++
 // <img src="../assets/autumn-7644257_1280.jpg" alt="">
 ++++
 
-[picture]
-++++
-++++
 
 astro-image::../assets/autumn-7644257_1280.jpg[]
 
 == Section Two
 
-
+// The code written here is to satisfy testing doc loader tests.
 greet::World[] 
 
 
