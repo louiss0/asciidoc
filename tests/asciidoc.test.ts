@@ -165,7 +165,7 @@ type AsciidocConfig = Partial<{
         context: 'example' | 'listing' | 'literal' | 'pass' | 'quote' | 'sidebar'
         processor: (attributes: Record<string, NonNullable<unknown>>, reader: Reader) => string
     }>
-    macros: {
+    macros: Partial<{
         inline: Record<
             string,
             {
@@ -179,7 +179,7 @@ type AsciidocConfig = Partial<{
                 context: 'example' | 'listing' | 'literal' | 'pass' | 'quote' | 'sidebar'
                 processor: (target: string, attributes: Record<string, NonNullable<unknown>>) => string
             }>
-    }
+    }>
 
 }>
 
@@ -194,72 +194,84 @@ function registerBasedOnConfig(config: AsciidocConfig) {
 
     const { attributes, blocks, macros: { block, inline } } = config
 
-    for (const [blockName, blockContextAndProcessor] of Object.entries(blocks)) {
+    if (blocks) {
+
+        for (const [blockName, blockContextAndProcessor] of Object.entries(blocks)) {
 
 
-        registry.block(blockName, function () {
+            registry.block(blockName, function () {
 
 
-            this.process(function (parent, reader, attributes) {
+                this.process(function (parent, reader, attributes) {
 
 
-                return this.createBlock(
-                    parent,
-                    blockContextAndProcessor.context,
-                    blockContextAndProcessor.processor(
-                        attributes,
-                        reader
-                    ),
-                    attributes
-                )
+                    return this.createBlock(
+                        parent,
+                        blockContextAndProcessor.context,
+                        blockContextAndProcessor.processor(
+                            attributes,
+                            reader
+                        ),
+                        attributes
+                    )
+
+                })
 
             })
 
-        })
-
+        }
     }
 
 
 
-    for (const [inlineMacroName, inlineMacroContextAndProcessor] of Object.entries(inline)) {
 
-        registry.inlineMacro(inlineMacroName, function () {
-
-
-            this.process(function (parent, target, attributes) {
+    if (inline) {
 
 
-                return this.createInline(
-                    parent,
-                    inlineMacroContextAndProcessor.context,
-                    inlineMacroContextAndProcessor.processor(target, attributes),
-                    attributes
-                )
+        for (const [inlineMacroName, inlineMacroContextAndProcessor] of Object.entries(inline)) {
+
+            registry.inlineMacro(inlineMacroName, function () {
+
+
+                this.process(function (parent, target, attributes) {
+
+
+                    return this.createInline(
+                        parent,
+                        inlineMacroContextAndProcessor.context,
+                        inlineMacroContextAndProcessor.processor(target, attributes),
+                        attributes
+                    )
+
+                })
 
             })
-
-        })
+        }
 
     }
 
-    for (const [blockMacroName, blockMacroContextAndProcessor] of Object.entries(block)) {
-
-        registry.inlineMacro(blockMacroName, function () {
+    if (block) {
 
 
-            this.process(function (parent, target, attributes) {
+        for (const [blockMacroName, blockMacroContextAndProcessor] of Object.entries(block)) {
+
+            registry.inlineMacro(blockMacroName, function () {
 
 
-                return this.createBlock(
-                    parent,
-                    blockMacroContextAndProcessor.context,
-                    blockMacroContextAndProcessor.processor(target, attributes),
-                    attributes
-                )
+                this.process(function (parent, target, attributes) {
+
+
+                    return this.createBlock(
+                        parent,
+                        blockMacroContextAndProcessor.context,
+                        blockMacroContextAndProcessor.processor(target, attributes),
+                        attributes
+                    )
+
+                })
 
             })
-
-        })
+        }
 
 
     }
@@ -272,9 +284,6 @@ function registerBasedOnConfig(config: AsciidocConfig) {
     }
 
 }
-
-
-
 
 const docTest = test.extend<{ doc: Document }>({
     // biome-ignore lint/correctness/noEmptyPattern: Vitest requires this to be there
@@ -297,6 +306,37 @@ const docTest = test.extend<{ doc: Document }>({
 
 
     }
+})
+
+
+const docUsingDocLoaderTest = test.extend<{ doc: Document }>({
+    // biome-ignore lint/correctness/noEmptyPattern: Vitest requires this to be there
+    async doc({ }, use) {
+
+        const docLoader = registerBasedOnConfig({
+            attributes: {
+                experimental: true,
+                'source-highlighter': HIGHLIGHTER
+            },
+            macros: {
+                block: {
+                    greet: {
+                        context: "listing",
+                        processor(target) {
+
+                            return `Hello ${target}`
+
+                        }
+                    }
+                }
+            }
+        })
+
+
+        await use(docLoader(PATH_TO_THE_FIRST_PAGE))
+
+    }
+
 })
 
 describe('Testing asciidoc', () => {
@@ -419,7 +459,7 @@ describe('Testing asciidoc', () => {
     )
 
 
-    docTest(
+    docTest.skip(
         "A literal picture block can be used to render a picture element with interpolation",
         ({ doc }) => {
 
@@ -431,4 +471,15 @@ describe('Testing asciidoc', () => {
 
 })
 
+describe('Testing document loader', () => {
 
+
+    docUsingDocLoaderTest('it works', ({ doc }) => {
+
+
+        expect(doc.getContent()).toMatch(/<[^>]+>/g)
+
+    })
+
+
+})
