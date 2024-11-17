@@ -190,7 +190,7 @@ function registerBasedOnConfig(config: AsciidocConfig) {
 
     const processor = asciidoctor()
 
-    const registry = new processor.Extensions.Registry()
+    const registry = processor.Extensions.create()
 
     const { attributes, blocks, macros: { block, inline } } = config
 
@@ -255,7 +255,7 @@ function registerBasedOnConfig(config: AsciidocConfig) {
 
         for (const [blockMacroName, blockMacroContextAndProcessor] of Object.entries(block)) {
 
-            registry.inlineMacro(blockMacroName, function () {
+            registry.blockMacro(blockMacroName, function () {
 
 
                 this.process(function (parent, target, attributes) {
@@ -276,10 +276,13 @@ function registerBasedOnConfig(config: AsciidocConfig) {
 
     }
 
+
+
+
     return (filename: string) => {
 
 
-        return processor.loadFile(filename, { attributes })
+        return processor.loadFile(filename, { attributes, extension_registry: registry })
 
     }
 
@@ -480,6 +483,14 @@ describe('Testing document loader', () => {
         expect(doc.getContent()).toMatch(/<[^>]+>/g)
 
     })
+
+    docUsingDocLoaderTest(
+        "A greet macro can be sucessfully registered using the doc loader",
+        ({ doc }) => {
+
+            expect(doc.getContent()).toMatch(/Hello\s+.+/g)
+
+        })
 
 
 })
