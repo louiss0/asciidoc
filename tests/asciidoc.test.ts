@@ -202,6 +202,8 @@ function registerBasedOnConfig(config: AsciidocConfig) {
             registry.block(blockName, function () {
 
 
+                this.onContext(blockContextAndProcessor.context)
+
                 this.process(function (parent, reader, attributes) {
 
 
@@ -318,6 +320,12 @@ const docUsingDocLoaderTest = test.extend<{ doc: Document }>({
     async doc({ }, use) {
 
         const docLoader = registerBasedOnConfig({
+            blocks: {
+                span: {
+                    context: "pass",
+                    processor: (_, reader) => `<span>${reader.getString()}</span>`
+                }
+            },
             macros: {
                 inline: {
                     message: {
@@ -514,7 +522,7 @@ describe('Testing document loader', () => {
         ({ doc }) => {
 
 
-            expect(doc.getContent()).toMatch(/<div>.+<\/div>/)
+            expect(doc.getContent()).toMatch(/<span>I'm in a span<\/span>/g)
 
         }
     )

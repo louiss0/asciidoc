@@ -33,3 +33,7 @@ greet::World[]
 
 The message:ok[]
 
+[span]
+++++
+I'm in a span 
+++++
