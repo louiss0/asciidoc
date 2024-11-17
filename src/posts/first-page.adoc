@@ -14,8 +14,16 @@ This is the intro.
 
 == Section One
 
+[picture]
+++++
+// <img src="../assets/autumn-7644257_1280.jpg" alt="">
+++++
 
-astro-image:../assets/autumn-7644257_1280.jpg[]
+[picture]
+++++
+++++
+
+astro-image::../assets/autumn-7644257_1280.jpg[]
 
 == Section Two
 
