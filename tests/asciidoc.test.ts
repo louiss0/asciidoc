@@ -485,12 +485,15 @@ describe('Testing document loader', () => {
     })
 
     docUsingDocLoaderTest(
-        "A greet macro can be sucessfully registered using the doc loader",
+        "A greet block macro can be sucessfully registered using the config",
         ({ doc }) => {
 
             expect(doc.getContent()).toMatch(/Hello\s+.+/g)
 
         })
+
+
+
 
 
 })
