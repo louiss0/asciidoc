@@ -169,7 +169,7 @@ type AsciidocConfig = Partial<{
         inline: Record<
             string,
             {
-                context: 'example' | 'listing' | 'literal' | 'pass' | 'quote' | 'sidebar'
+                context: 'quoted' | 'anchor'
                 processor: (target: string, attributes: Record<string, NonNullable<unknown>>) => string
             }
 
@@ -234,6 +234,7 @@ function registerBasedOnConfig(config: AsciidocConfig) {
 
 
                 this.process(function (parent, target, attributes) {
+
 
 
                     return this.createInline(
@@ -322,6 +323,14 @@ const docUsingDocLoaderTest = test.extend<{ doc: Document }>({
                 'source-highlighter': HIGHLIGHTER
             },
             macros: {
+                inline: {
+                    message: {
+                        context: "quoted",
+                        processor(target) {
+                            return `MESSAGE: ${target}`
+                        },
+                    }
+                },
                 block: {
                     greet: {
                         context: "listing",
@@ -493,6 +502,16 @@ describe('Testing document loader', () => {
         })
 
 
+    docUsingDocLoaderTest(
+        "A inline message macro can be registered using the config file",
+        ({ doc }) => {
+
+
+
+            expect(doc.getContent()).toMatch(/MESSAGE:\s+.+/g)
+
+        }
+    )
 
 
 
