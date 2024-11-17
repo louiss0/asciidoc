@@ -502,13 +502,22 @@ describe('Testing document loader', () => {
         })
 
 
+
     docUsingDocLoaderTest(
         "A inline message macro can be registered using the config file",
         ({ doc }) => {
 
-
-
             expect(doc.getContent()).toMatch(/MESSAGE:\s+.+/g)
+
+        }
+    )
+
+    docUsingDocLoaderTest(
+        "A block can be registered using the config",
+        ({ doc }) => {
+
+
+            expect(doc.getContent()).toMatch(/<div>.+<\/div>/)
 
         }
     )
