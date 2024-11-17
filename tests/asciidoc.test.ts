@@ -318,10 +318,6 @@ const docUsingDocLoaderTest = test.extend<{ doc: Document }>({
     async doc({ }, use) {
 
         const docLoader = registerBasedOnConfig({
-            attributes: {
-                experimental: true,
-                'source-highlighter': HIGHLIGHTER
-            },
             macros: {
                 inline: {
                     message: {
@@ -514,6 +510,7 @@ describe('Testing document loader', () => {
 
     docUsingDocLoaderTest(
         "A block can be registered using the config",
+
         ({ doc }) => {
 
 
